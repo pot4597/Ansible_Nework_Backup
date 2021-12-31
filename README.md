@@ -13,4 +13,4 @@
 1. 매일 자정 스케줄 백업, 백업 데이터 1주일치 보관
 1. 각시스템 날짜 및 호스트명별 폴더및 파일 생성  
 ![ansible_backup](https://user-images.githubusercontent.com/61907361/147813379-42dbc5e9-9f4b-43ae-aff3-8da500816e80.JPG)
-![ansible_config](https://user-images.githubusercontent.com/61907361/147813388-e2524c49-2d32-40d5-9bbd-31fa6f9b7f84.JPG)
+![ansible_config](https://user-images.githubusercontent.com/61907361/147813502-900d0163-1e5d-4cf2-8676-3418e54c7907.JPG)
