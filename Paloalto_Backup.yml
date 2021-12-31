@@ -1,0 +1,27 @@
+---
+- name: Paloalto Configuration Backup
+  hosts: all
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: Accessing Paloalto Device
+      uri:
+        validate_certs: no
+        url: https://{{ ansible_host }}/api/?type=config&action=show&key=key_value
+        return_content: yes
+        method: PUT
+      register: result
+
+    - name: Make Result Directory
+      local_action:
+        module: file
+        path: /etc/ansible/paloalto/korea/config_backup/{{ group_names | replace("['",'') | replace("']",'') }}/{{ lookup('pipe', 'date +%Y%m%d') }}
+        state: directory
+        mode: u=rwX,g=rX,o=rX
+      register: backup
+
+    - name: Save Paloalto Configuration on this Folder 
+      copy:
+        content: "{{ result['content'] }}"
+        dest: "/{{ backup['path'] }}/{{ ansible_host }}.txt"

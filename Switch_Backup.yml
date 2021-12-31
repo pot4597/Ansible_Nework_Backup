@@ -1,0 +1,75 @@
+---
+- name: Cisco Switch Configuration Backup
+  hosts: all
+  gather_facts: no
+  tasks:
+
+   - name: Authentication
+     include_vars: /etc/ansible/playbooks/group_vars/ios.yml
+
+
+   - name: Make Directory
+     local_action:
+       module: file
+       path: /etc/ansible/cisco/korea/config_backup/{{ group_names | replace("['",'') | replace("korea', '",'') | replace("', 'korea']",'') | replace("']",'') }}/{{ lookup('pipe', 'date +%Y%m%d') }}
+       state: directory
+       mode: u=rwX,g=rX,o=rX
+     register: backup
+     ignore_errors: True
+
+
+   - name: config length 0
+     ios_command:
+        commands:
+           - terminal length 0
+     ignore_errors: True
+
+
+   - name: Running Configuration
+     ios_config:
+       backup: yes
+     register: print_output
+     ignore_errors: True
+
+   - name: Save output
+     copy:
+       src: "{{ print_output.backup_path }}"
+       dest: "/{{ backup['path'] }}/{{ ansible_host }}.config"
+     ignore_errors: True
+  tags:
+     - ssh
+
+
+- name: NXOS Device Configuration Backup
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Make Directory
+      local_action:
+        module: file
+        path: /etc/ansible/cisco/korea/config_backup/{{ group_names | replace("['",'') | replace("korea', '",'') | replace("', 'korea']",'') | replace("']",'') }}/{{ lookup('pipe', 'date +%Y%m%d') }}
+        state: directory
+        mode: u=rwX,g=rX,o=rX
+      ignore_errors: True
+
+
+    - name: config length 0
+      cisco.nxos.nxos_command:
+        commands:
+        - terminal length 0
+      ignore_errors: True
+
+    - name: Running Configuration
+      cisco.nxos.nxos_config:
+        backup: yes
+      register: print_output
+      ignore_errors: True
+
+    - name: Save output
+      copy:
+        src: "{{ print_output.backup_path }}"
+        dest: "/etc/ansible/cisco/korea/config_backup/center/{{ lookup('pipe', 'date +%Y%m%d') }}/{{ ansible_host }}.config"
+      ignore_errors: True
+  tags:
+    - nxos 
