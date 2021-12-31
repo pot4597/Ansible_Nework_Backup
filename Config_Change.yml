@@ -1,0 +1,33 @@
+---
+- name: Backup show version and other user level commands
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Authentication
+      include_vars: /etc/ansible/playbooks/group_vars/ios.yml
+
+    - name: test
+      ios_banner:
+        banner: motd
+        text: |
+          #######################################################################
+          #                                                                     #
+          #                    !!! Authorized Access Only !!!                   #
+          #                                                                     #
+          #                           - W A R N I N G -                         #
+          #                                                                     #
+          #   A notice that any unauthorized use of the system is unlawful,     #
+          #      and may be subject to civil and/or criminal penalties.         #
+          #                                                                     #
+          #######################################################################
+        state: present
+
+    - name: Config
+      ios_config:
+        lines:
+          - ntp server 1.1.1.1
+          - ip domain-name test.co.kr
+          - clock timezone KST 9
+          - no banner login
+        save_when: modified
