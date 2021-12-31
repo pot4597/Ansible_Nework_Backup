@@ -1,5 +1,6 @@
 # Ansible_Nework_Backup
 ## 개요
+네트워크/보안 장비 운영 중 장애 발생 시 백업 시스템을 활용하여 신속 복구
 
 ## 구성도
 ![ansible1](https://user-images.githubusercontent.com/61907361/147812095-53dd55f4-9d22-4953-9992-ae7572260cba.JPG)
